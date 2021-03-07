@@ -1,6 +1,6 @@
 = {subject}
-:subject: RH354 - RHEL 8 New Features for Experienced Linux Administrators
-:description:  RH354v8 Instructor Notes
+:subject: Creating and Publishing Ansible Roles
+:description:  Ansible and Roles Overview and SCAP Workbench Refresher
 Travis Michette <tmichett@redhat.com>
 :doctype: book
 :customer:  GLS
