@@ -1,0 +1,47 @@
+---
+- name: Ansiblize Managed Hosts   ### Play to connect to all managed nodes in inventory and setup systems to be managed by Ansible
+  hosts: localhost
+### Creation of Variables for the playbook's plays and tasks.
+### This will define variables allowing the playbook to be reused easier
+  vars_files:
+    # Contains variables for the Ansible User Creation
+    - variables.yml
+
+  tasks:
+
+    ### Create the Ansible User
+    - name: Create Ansible User
+      debug:
+        msg: This will use the USER  module
+
+    ### Create the Ansible User
+    - name: Create Ansible User Password (if required)
+      debug:
+        msg: This sill use the COMMAND or SHELL  module
+
+    ### Copy Ansible User SSH Keys (if defined)
+    - name: Copy Ansible User SSH Keys
+      debug:
+        msg: This will use the USER  module
+
+    ### Modify Sudoers to Allow Passwordless SUDO
+    - name: Create Ansible User SUDOERS Entry
+      debug:
+        msg: This sill use the Copy module
+
+    ### Modify SSH_CONFIG to prevent Root Login
+    - name: Prevent Root Login via SSH (if required)
+      debug:
+        msg: This sill use the Line in File module
+
+    ### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
+    - name: Prevent Root Login via SSH (if required)
+      debug:
+        msg: This sill use the Line in File module
+
+  handlers:
+
+    ### Restart SSHD if Config File was Changed
+    - name: Restart SSHD
+      debug:
+        msg: This sill use the SERVICE or SYSTEMD
