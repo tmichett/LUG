@@ -1,0 +1,30 @@
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:pygments-style: tango
+:source-highlighter: pygments
+:imagesdir: images/
+
+
+= Ansible Roles
+
+The items within this directory and its sub-directories related to the presentation on Ansible Roles and publishing Ansible Roles to Ansible Galaxy. The playbooks and contents within this presentation are for demonstration and meant to provide an easy understanding for how to create and publish an Ansible Role. Additional Ansible Role examples are available from other Github repositories and Ansible Galaxy roles.
+
+.Ansible Galaxy Roles
+[TIP]
+====
+There are several roles that have already been created and published on Ansible Galaxy that can be studied and used to further explain and illustrate role creation.
+
+*Simple Role to Deploy Packages*: https://galaxy.ansible.com/tmichett/deploy_packages
+
+*Simple Role to manipulate firewall services with the FIREWALLD module.*: https://galaxy.ansible.com/tmichett/manage_firewall
+
+*Simple Role to manipulate services with the SERVICE module.*: https://galaxy.ansible.com/tmichett/manage_services
+====
