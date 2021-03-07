@@ -1,0 +1,5 @@
+= CKB LUG
+
+== Bridgeport/Clarksburg LUG and Meetup
+
+This repository was created to house resources for the Bridgeport/Clarksburg LUG and Meetup group.
