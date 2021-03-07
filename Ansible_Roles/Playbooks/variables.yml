@@ -1,0 +1,3 @@
+---
+ansible_user: ansible-user
+ansible_user_password: redhat

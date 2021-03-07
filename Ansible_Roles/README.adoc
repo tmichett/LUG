@@ -17,7 +17,7 @@ endif::[]
 
 The items within this directory and its sub-directories related to the presentation on Ansible Roles and publishing Ansible Roles to Ansible Galaxy. The playbooks and contents within this presentation are for demonstration and meant to provide an easy understanding for how to create and publish an Ansible Role. Additional Ansible Role examples are available from other Github repositories and Ansible Galaxy roles.
 
-.Ansible Galaxy Roles
+.*Ansible Galaxy Roles*
 [TIP]
 ====
 There are several roles that have already been created and published on Ansible Galaxy that can be studied and used to further explain and illustrate role creation.
@@ -27,4 +27,16 @@ There are several roles that have already been created and published on Ansible 
 *Simple Role to manipulate firewall services with the FIREWALLD module.*: https://galaxy.ansible.com/tmichett/manage_firewall
 
 *Simple Role to manipulate services with the SERVICE module.*: https://galaxy.ansible.com/tmichett/manage_services
+====
+
+.*Ansible Galaxy Roles - Github Project Repositories*
+[TIP]
+====
+There are several roles that have already been created and published on Ansible Galaxy that can be studied and used to further explain and illustrate role creation. The links below point to the Github repositories containing the Role sources.
+
+*Simple Role to Deploy Packages*: https://github.com/tmichett/deploy_packages
+
+*Simple Role to manipulate firewall services with the FIREWALLD module.*: https://github.com/tmichett/manage_firewall
+
+*Simple Role to manipulate services with the SERVICE module.*: https://github.com/tmichett/manage_services
 ====
