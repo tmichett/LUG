@@ -27,7 +27,7 @@
     ### Modify Sudoers to Allow Passwordless SUDO
     - name: Create Ansible User SUDOERS Entry
       copy:
-        content: "{{ ansible_user_name }}" ALL=(ALL) NOPASSWD:ALL
+        content: "{{ ansible_user_name }} ALL=(ALL) NOPASSWD:ALL"
         dest: /etc/sudoers.d/"{{ ansible_user_name }}"
 
     ### Modify SSH_CONFIG to prevent Root Login
