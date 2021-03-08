@@ -61,7 +61,7 @@
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^PasswordAuthentication'
-        line: PasswordAuthentication {{ ssh_passwords_allowed }}
+        line: PasswordAuthentication '{{ ssh_passwords_allowed }}'
         backup: yes
       notify:
         - Restart SSHD
@@ -71,11 +71,11 @@
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^PermitRootLogin'
-        line: PermitRootLogin {{ ssh_root_allowed }}
+        line: PermitRootLogin "{{ ssh_root_allowed }}"
         backup: yes
       notify:
         - Restart SSHD
-        
+
   handlers:
 
     ### Restart SSHD if Config File was Changed
