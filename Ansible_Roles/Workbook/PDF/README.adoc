@@ -1,0 +1,18 @@
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:pygments-style: tango
+:source-highlighter: pygments
+:imagesdir: images/
+
+
+= Ansible Workshop Student Guide
+
+The *Ansible_Workshop_Guide.pdf* will be the guide that can be used to perform the hands-on exercises for this demo and workshop.
