@@ -22,10 +22,13 @@
     - name: Create Ansible User Password (if required)
       shell: echo {{ ansible_user_password }} | passwd {{ ansible_user_name }} --stdin
 
-    ### Copy Ansible User SSH Keys (if defined)
+    ### Copy Ansible User Public SSH Keys (if defined)
+    ### This will take the public key and set as the authorized_key from the current user 
     - name: Copy Ansible User SSH Keys
-      debug:
-        msg: This will use the USER  module
+      authorized_key:
+        user: "{{ ansible_user_name }}"
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
 
     ### Modify Sudoers to Allow Passwordless SUDO
     - name: Create Ansible User SUDOERS Entry
