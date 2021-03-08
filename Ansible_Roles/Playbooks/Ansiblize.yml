@@ -20,8 +20,7 @@
 
     ### Create the Ansible User
     - name: Create Ansible User Password (if required)
-      debug:
-        msg: This sill use the COMMAND or SHELL  module
+      shell: echo {{ ansible_user_password }} | passwd {{ ansible_user_name }} --stdin
 
     ### Copy Ansible User SSH Keys (if defined)
     - name: Copy Ansible User SSH Keys
