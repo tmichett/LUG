@@ -11,7 +11,7 @@
 
     ### Create the Ansible User
     - name: Create Ansible User
-      debug:
+      user:
         msg: This will use the USER  module
 
     ### Create the Ansible User
@@ -28,7 +28,7 @@
     - name: Create Ansible User SUDOERS Entry
       copy:
         content: "{{ ansible_user_name }} ALL=(ALL) NOPASSWD:ALL"
-        dest: /etc/sudoers.d/"{{ ansible_user_name }}"
+        dest: /etc/sudoers.d/{{ ansible_user_name }}
 
     ### Modify SSH_CONFIG to prevent Root Login
     - name: Prevent Root Login via SSH (if required)
