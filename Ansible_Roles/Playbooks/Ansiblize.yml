@@ -74,7 +74,7 @@
         line: PermitRootLogin {{ ssh_root_allowed }}
         backup: yes
       notify:
-        - Restart SSHD Test
+        - Restart SSHD
 
     ### Test the SSHD Config File
     - name: Test SSHD Config File
