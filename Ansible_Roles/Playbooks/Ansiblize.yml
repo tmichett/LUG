@@ -24,11 +24,20 @@
 
     ### Copy Ansible User Public SSH Keys (if defined)
     ### This will take the public key and set as the authorized_key from the current user 
+    ### Only works if the current user/remote user is the same as user being created
     - name: Copy Ansible User SSH Keys
       authorized_key:
         user: "{{ ansible_user_name }}"
         state: present
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+    ### Copy Ansible User Public SSH Keys from file (if defined)
+    ### This will take the public key specified and set as and authorized_key for the user specified
+    - name: Copy Ansible User SSH Keys
+      authorized_key:
+        user: "{{ ansible_user_name }}"
+        state: present
+        key: Files/id_rsa.pub
 
     ### Modify Sudoers to Allow Passwordless SUDO
     - name: Create Ansible User SUDOERS Entry
