@@ -78,8 +78,14 @@
 
     ### Test the SSHD Config File
     - name: Test SSHD Config File
-      shell: sshd - t
+      shell: sshd -t
       register: sshd_results
+
+    ### Test the SSHD Config File
+    - name: Test SSHD Config File Debug Output
+      debug:
+        var: sshd_results
+
 
   handlers:
 
