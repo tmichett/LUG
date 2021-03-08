@@ -23,6 +23,103 @@ endif::[]
 
 Ansible roles ... blah blah blah
 
-=== Creating an Ansible Role
+=== Creating a Github repository for an Ansible Role
 
-=== Publishing Ansible Roles
+The first step in the creation of an  Ansible role for publishing is to create a Github repository to house the role and use the *ansible-galaxy init* command to initialize the proper directory structure.
+
+. Create and Define the Ansible ROLE and Github Repository
++
+.Initializing an Ansible Role
+[source,bash]
+----
+[student@workstation github]$ ansible-galaxy init Demo_Role
+- Demo_Role was created successfully
+----
++
+.Initializing a Git Repository
+[source,bash]
+----
+[student@workstation github]$ cd Demo_Role/
+
+[student@workstation Demo_Role]$ git init
+Initialized empty Git repository in /home/student/github/Demo_Role/.git/
+----
++
+.Add Files to Local Repository
+[source,bash]
+----
+[student@workstation Demo_Role]$ git add .
+
+[student@workstation Demo_Role]$ git commit -m "Added Role Structure"
+[master (root-commit) 5c12d1a] Added Role Structure
+ 8 files changed, 106 insertions(+)
+ create mode 100644 README.md
+ create mode 100644 defaults/main.yml
+ create mode 100644 handlers/main.yml
+ create mode 100644 meta/main.yml
+ create mode 100644 tasks/main.yml
+ create mode 100644 tests/inventory
+ create mode 100644 tests/test.yml
+ create mode 100644 vars/main.yml
+----
++
+.Local GIT Repository vs. Github Repository
+[IMPORTANT]
+====
+At this point, the repository that has been created is a local *git* repository. It is necessary to create a *New Repository* on Github and connect the local repository to Github
+====
+
+. Login to Github and click "New" to create a new repository
++
+image::Ansible-56a4b.png[title="Github New Repository", align="center"]
+
+. Provide a *Name* for the repository *ONLY* but do not initialize as you are going to be linking a local repository. It is also OK to provide *Description* for this repository. Then click *Create Repository*
++
+image::Ansible-10234.png[title="Github Repository Creation", align="center"]
++
+.Github Repository Quick Setup
+[TIP]
+====
+Github will provide you with a *Quick Setup* set of instructions. These are basic instructions that can be used to import/connect an existing local *git* repository.
+
+image::Ansible-bcaca.png[title="Github Quick Setup", align="center"]
+====
+
+. Link your local GIT repository to Github by using *git add origin* and *git push origin master* commands.
++
+[source,bash]
+----
+[student@workstation Demo_Role]$ git remote add origin git@github.com:tmichett/Demo_Role.git
+
+[student@workstation Demo_Role]$  git push -u origin master
+Enumerating objects: 16, done.
+Counting objects: 100% (16/16), done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (16/16), 2.30 KiB | 471.00 KiB/s, done.
+Total 16 (delta 0), reused 0 (delta 0)
+To github.com:tmichett/Demo_Role.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+----
+
+. Verify that the initial contents were loaded to Github by refreshing the web browser
++
+image::Ansible-ae6e1.png[title="Github Repository Contents", align="center"]
+
+==== Creating an Ansible Role for Publishing
+
+After the creating a Github repository has been created along with the initial Ansible role structure created by the *ansible-galaxy* command, it is now time to take existing playbooks to break down into tasks and other sections to create the role or create the role from scratch.
+
+.Role Creation
+[NOTE]
+====
+I find that it is easier to create a role from an existing playbook and to break the playbook down into modules. Remember that Ansible roles and playbooks are supposed to be simple and easy to follow. An Ansible Role especially should be a simple role to accomplish a given outcome and the role should be broken down and easy to use. There are always trade-offs with this process as well as the *Ansiblize Role* we are looking at could be broken down into smaller roles:
+
+* Create and Setup the User (user creation, password file, SSH keys, SUDOERS file)
+* Configure SSHD
+
+However, since I wanted a single role to perform a single *main* task, I decided not to break the larger *Ansiblize Role* into two smaller roles.
+====
+
+=== Publishing Ansible Roles to Ansible Galaxy
