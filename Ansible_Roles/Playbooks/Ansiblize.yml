@@ -81,6 +81,7 @@
         - Restart SSHD
 
     ### Test the SSHD Config File
+    ### Technically this will exit out and break the Ansible playbook if it fails
     - name: Test SSHD Config File
       shell: sshd -t
       register: sshd_results
@@ -88,7 +89,7 @@
     ### Test the SSHD Config File
     - name: Test SSHD Config File Debug Output
       debug:
-        msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stdout_lines }}
+        msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stderr_lines }}
       when: sshd_results.rc != 0
 
     ### Test the SSHD Config File
