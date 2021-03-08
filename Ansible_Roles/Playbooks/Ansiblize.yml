@@ -14,7 +14,7 @@
     ssh_key_file_data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSmPWK8JpLCWn2LhjoR1Rdvb6NUbQdhqQAoZ15+OWNjCEmVZV9pReuPmCmM1uiAz+NlExvjpF3uxPeKf7Z5GqoVO/YzP5KFqPSH6J0TpxilBc+5uSJnZoS+9oB+0jFVT5hpb99ZT85mLEsSoOLDlposy8SAunr8w5JhaaIuz7Is+GDPejuAtCEQmEcDJJl4IPnxt6X0YJ+NZQDt2mkWuSP2EIsl470LNu9OAUN19JfJe56PcjUoqedu+IXyjP16d+GldjaV1aomnTZKxLvmDTkCDO56H88bhQWX4XUvyystf/E1Bji72cWy57kwf93Jblh2DE6Vu8d6COkNHckQCHl ansible-user@workstation.lab.example.com
     ssh_key_answer: yes
     ssh_root_allowed: yes
-    ssh_passwords_allowed: yes 
+    ssh_passwords_allowed: yes
 
   tasks:
 
@@ -63,6 +63,8 @@
         regexp: '^PasswordAuthentication'
         line: PasswordAuthentication {{ ssh_passwords_allowed }}
         backup: yes
+      notify:
+        - Restart SSHD
 
     ### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
     - name: Prevent Root Login via SSH (if required)
@@ -71,10 +73,13 @@
         regexp: '^PermitRootLogin'
         line: PermitRootLogin {{ ssh_root_allowed }}
         backup: yes
-
+      notify:
+        - Restart SSHD
+        
   handlers:
 
     ### Restart SSHD if Config File was Changed
     - name: Restart SSHD
-      debug:
-        msg: This sill use the SERVICE or SYSTEMD
+      systemd:
+        name: sshd
+        state: restarted
