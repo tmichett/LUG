@@ -64,7 +64,7 @@
         line: PasswordAuthentication {{ ssh_passwords_allowed }}
         backup: yes
       notify:
-        - Restart SSHD
+        - Restart SSHD Test
 
     ### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
     - name: Prevent Root Login via SSH (if required)
@@ -74,7 +74,12 @@
         line: PermitRootLogin {{ ssh_root_allowed }}
         backup: yes
       notify:
-        - Restart SSHD
+        - Restart SSHD Test
+
+    ### Test the SSHD Config File
+    - name: Test SSHD Config File
+      shell: sshd - t
+      register: sshd_results
 
   handlers:
 
@@ -83,3 +88,4 @@
       systemd:
         name: sshd
         state: restarted
+      when: sshd_results
