@@ -1,11 +1,17 @@
 ---
 - name: Ansiblize Managed Hosts   ### Play to connect to all managed nodes in inventory and setup systems to be managed by Ansible
   hosts: all
+
 ### Creation of Variables for the playbook's plays and tasks.
 ### This will define variables allowing the playbook to be reused easier
   vars_files:
     # Contains variables for the Ansible User Creation
     - variables.yml
+
+### Creation of Variables for plays and tasks the are locally seclectable
+
+  vars:
+    ssh_key_file:
 
   tasks:
 
@@ -23,7 +29,7 @@
       shell: echo {{ ansible_user_password }} | passwd {{ ansible_user_name }} --stdin
 
     ### Copy Ansible User Public SSH Keys (if defined)
-    ### This will take the public key and set as the authorized_key from the current user 
+    ### This will take the public key and set as the authorized_key from the current user
     ### Only works if the current user/remote user is the same as user being created
     - name: Copy Ansible User SSH Keys
       authorized_key:
@@ -37,7 +43,7 @@
       authorized_key:
         user: "{{ ansible_user_name }}"
         state: present
-        key: Files/id_rsa.pub
+        key: {{  ssh_key_file }}
 
     ### Modify Sudoers to Allow Passwordless SUDO
     - name: Create Ansible User SUDOERS Entry
