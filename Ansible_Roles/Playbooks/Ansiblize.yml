@@ -12,6 +12,7 @@
 
   vars:
     ssh_key_file_data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSmPWK8JpLCWn2LhjoR1Rdvb6NUbQdhqQAoZ15+OWNjCEmVZV9pReuPmCmM1uiAz+NlExvjpF3uxPeKf7Z5GqoVO/YzP5KFqPSH6J0TpxilBc+5uSJnZoS+9oB+0jFVT5hpb99ZT85mLEsSoOLDlposy8SAunr8w5JhaaIuz7Is+GDPejuAtCEQmEcDJJl4IPnxt6X0YJ+NZQDt2mkWuSP2EIsl470LNu9OAUN19JfJe56PcjUoqedu+IXyjP16d+GldjaV1aomnTZKxLvmDTkCDO56H88bhQWX4XUvyystf/E1Bji72cWy57kwf93Jblh2DE6Vu8d6COkNHckQCHl ansible-user@workstation.lab.example.com
+    ssh_key_answer: yes 
 
   tasks:
 
@@ -36,6 +37,7 @@
         user: "{{ ansible_user_name }}"
         state: present
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+      when: ssh_key_file_data is not defined and ssh_key_answer is true
 
     ### Copy Ansible User Public SSH Keys from file (if defined)
     ### This will take the public key specified and set as and authorized_key for the user specified
