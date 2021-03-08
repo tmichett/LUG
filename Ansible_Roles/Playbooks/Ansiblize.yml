@@ -44,6 +44,7 @@
         user: "{{ ansible_user_name }}"
         state: present
         key: "{{ ssh_key_file_data }}"
+      when: ssh_key_file_data is defined
 
     ### Modify Sudoers to Allow Passwordless SUDO
     - name: Create Ansible User SUDOERS Entry
