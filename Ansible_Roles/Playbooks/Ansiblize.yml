@@ -82,9 +82,9 @@
       register: sshd_results
 
     ### Test the SSHD Config File
-    - name: Test SSHD Config File Debug Output
-      debug:
-        var: sshd_results
+##    - name: Test SSHD Config File Debug Output
+##      debug:
+##        var: sshd_results
 
 
   handlers:
@@ -94,4 +94,4 @@
       systemd:
         name: sshd
         state: restarted
-      when: sshd_results
+      when: sshd_results.rc==0
