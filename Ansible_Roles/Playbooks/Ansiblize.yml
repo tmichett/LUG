@@ -12,7 +12,11 @@
     ### Create the Ansible User
     - name: Create Ansible User
       user:
-        msg: This will use the USER  module
+        name: "{{ ansible_user_name }}"
+        state: present
+        shell: /bin/bash
+        comment: Ansible User for System 
+
 
     ### Create the Ansible User
     - name: Create Ansible User Password (if required)
