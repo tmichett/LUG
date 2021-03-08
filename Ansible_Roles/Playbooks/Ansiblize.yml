@@ -11,7 +11,7 @@
 ### Creation of Variables for plays and tasks the are locally seclectable
 
   vars:
-    ssh_key_file:
+    ssh_key_file: Files/id_rsa.pub 
 
   tasks:
 
