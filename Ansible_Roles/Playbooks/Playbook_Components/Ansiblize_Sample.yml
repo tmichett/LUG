@@ -1,0 +1,8 @@
+---
+- name: Ansiblize Managed Hosts   ### Play to connect to all managed nodes in inventory and setup systems to be managed by Ansible by using the ROLE
+  hosts: all
+### Creation of Variables for the playbook's plays and tasks.
+### This will define variables allowing the playbook to be reused easier
+  vars_files:
+    # Contains variables for the Ansible User Creation
+    - variables.yml
