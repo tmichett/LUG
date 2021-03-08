@@ -56,8 +56,11 @@
 
     ### Modify SSH_CONFIG to prevent Root Login
     - name: Prevent Root Login via SSH (if required)
-      debug:
-        msg: This sill use the Line in File module
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: PermitRootLogin {{ root_allowed }}
+        backup: yes
 
     ### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
     - name: Prevent Root Login via SSH (if required)
