@@ -1,0 +1,6 @@
+---
+- name: Restart SSHD
+  systemd:
+    name: sshd
+    state: restarted
+  when: sshd_results.rc==0

@@ -1,0 +1,70 @@
+---
+### Create the Ansible User
+- name: Create Ansible User
+  user:
+    name: "{{ ansible_user_name }}"
+    state: present
+    shell: /bin/bash
+    comment: Ansible User for System
+
+
+### Create the Ansible User
+- name: Create Ansible User Password (if required)
+  shell: echo {{ ansible_user_password }} | passwd {{ ansible_user_name }} --stdin
+
+### Copy Ansible User Public SSH Keys (if defined)
+### This will take the public key and set as the authorized_key from the current user
+### Only works if the current user/remote user is the same as user being created
+- name: Copy Ansible User SSH Keys
+  authorized_key:
+    user: "{{ ansible_user_name }}"
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+  when: ssh_key_file_data is not defined and ssh_key_answer
+
+### Copy Ansible User Public SSH Keys from file (if defined)
+### This will take the public key specified and set as and authorized_key for the user specified
+- name: Copy Ansible User SSH Keys
+  authorized_key:
+    user: "{{ ansible_user_name }}"
+    state: present
+    key: "{{ ssh_key_file_data }}"
+  when: ssh_key_file_data is defined
+
+### Modify Sudoers to Allow Passwordless SUDO
+- name: Create Ansible User SUDOERS Entry
+  copy:
+    content: "{{ ansible_user_name }} ALL=(ALL) NOPASSWD:ALL\n"
+    dest: /etc/sudoers.d/{{ ansible_user_name }}
+
+### Modify SSH_CONFIG to prevent Root Login
+- name: Prevent Root Login via SSH (if required)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: PasswordAuthentication {{ ssh_passwords_allowed }}
+    backup: yes
+  notify:
+    - Restart SSHD Test
+
+### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
+- name: Prevent Root Login via SSH (if required)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: PermitRootLogin {{ ssh_root_allowed }}
+    backup: yes
+  notify:
+    - Restart SSHD
+
+### Test the SSHD Config File
+### Technically this will exit out and break the Ansible playbook if it fails
+- name: Test SSHD Config File
+  shell: sshd -t
+  register: sshd_results
+
+### Test the SSHD Config File
+- name: Test SSHD Config File Debug Output
+  debug:
+    msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stderr_lines }}
+  when: sshd_results.rc != 0
