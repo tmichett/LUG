@@ -122,4 +122,247 @@ I find that it is easier to create a role from an existing playbook and to break
 However, since I wanted a single role to perform a single *main* task, I decided not to break the larger *Ansiblize Role* into two smaller roles.
 ====
 
+*Creating the Ansible Role*
+
+The preferred method to create an Ansible role would be to start from a working playbook and to create the various role components. At a minimum, there should be a tasks section. After the various role components have been created with their corresponding *main.yml* files, any unused directories should be removed from the role. It is also very important for *Ansible Galaxy* to have the role created with a proper *README* file and *meta* files so that it will be scored a *5/5* on https://galaxy.ansible.com.
+
+.Ansiblize.YML Playbook
+[TIP]
+====
+For this demonstration, we will be taking the link:https://github.com/tmichett/LUG/blob/main/Ansible_Roles/Playbooks/Ansiblize.yml[Ansiblize Playbook] and turning it into an Ansible Role. This workshop has the complete playbook as well as the individual components broken down for ease of use and implementation. The individual components are located at link:https://github.com/tmichett/LUG/tree/main/Ansible_Roles/Playbooks/Playbook_Components[Playbook Components]. The steps below demonstrate how to create the various files required for the Ansible role.
+====
+
+. Create and copy the Ansible tasks into the *tasks/main.yml*
++
+.*tasks/main.yml* File
+[source,yaml]
+----
+---
+### Create the Ansible User
+- name: Create Ansible User
+  user:
+    name: "{{ ansible_user_name }}"
+    state: present
+    shell: /bin/bash
+    comment: Ansible User for System
+
+
+### Create the Ansible User
+- name: Create Ansible User Password (if required)
+  shell: echo {{ ansible_user_password }} | passwd {{ ansible_user_name }} --stdin
+
+### Copy Ansible User Public SSH Keys (if defined)
+### This will take the public key and set as the authorized_key from the current user
+### Only works if the current user/remote user is the same as user being created
+- name: Copy Ansible User SSH Keys
+  authorized_key:
+    user: "{{ ansible_user_name }}"
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+  when: ssh_key_file_data is not defined and ssh_key_answer
+
+### Copy Ansible User Public SSH Keys from file (if defined)
+### This will take the public key specified and set as and authorized_key for the user specified
+- name: Copy Ansible User SSH Keys
+  authorized_key:
+    user: "{{ ansible_user_name }}"
+    state: present
+    key: "{{ ssh_key_file_data }}"
+  when: ssh_key_file_data is defined
+
+### Modify Sudoers to Allow Passwordless SUDO
+- name: Create Ansible User SUDOERS Entry
+  copy:
+    content: "{{ ansible_user_name }} ALL=(ALL) NOPASSWD:ALL\n"
+    dest: /etc/sudoers.d/{{ ansible_user_name }}
+
+### Modify SSH_CONFIG to prevent Root Login
+- name: Prevent Root Login via SSH (if required)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: PasswordAuthentication {{ ssh_passwords_allowed }}
+    backup: yes
+  notify:
+    - Restart SSHD Test
+
+### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
+- name: Prevent Root Login via SSH (if required)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: PermitRootLogin {{ ssh_root_allowed }}
+    backup: yes
+  notify:
+    - Restart SSHD
+
+### Test the SSHD Config File
+### Technically this will exit out and break the Ansible playbook if it fails
+- name: Test SSHD Config File
+  shell: sshd -t
+  register: sshd_results
+
+### Test the SSHD Config File
+- name: Test SSHD Config File Debug Output
+  debug:
+    msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stderr_lines }}
+  when: sshd_results.rc != 0
+----
+
+. Create and copy the Handler into the *handlers/main.yml* file
++
+.*handlers/main.yml*
+[source,yaml]
+----
+---
+- name: Restart SSHD
+  systemd:
+    name: sshd
+    state: restarted
+  when: sshd_results.rc==0
+----
+
+. Create and copy the Variables into the *defaults/main.yml* file
++
+.*defaults/main.yml*
+[source,yaml]
+----
+---
+ansible_user_name: ansible-user
+ansible_user_password: redhat
+----
+
+. Modify the *meta/main.yml* file
++
+.*defaults/main.yml*
+[source,yaml]
+----
+---
+galaxy_info:
+  author: Travis Michette
+  description: Simple setup systems to become Ansible managed hosts.
+  company: Michette Technologies
+
+  # If the issue tracker for your role is not on github, uncomment the
+  # next line and provide a value
+  # issue_tracker_url: http://example.com/issue/tracker
+  issue_tracker_url: https://github.com/tmichett/Demo_Role/issues
+  # Some suggested licenses:
+  # - BSD (default)
+  # - MIT
+  # - GPLv2
+  # - GPLv3
+  # - Apache
+  # - CC-BY
+  license: BSD
+
+  min_ansible_version: 2.7
+
+  # If this a Container Enabled role, provide the minimum Ansible Container version.
+  # min_ansible_container_version:
+
+  # Optionally specify the branch Galaxy will use when accessing the GitHub
+  # repo for this role. During role install, if no tags are available,
+  # Galaxy will use this branch. During import Galaxy will access files on
+  # this branch. If Travis integration is configured, only notifications for this
+  # branch will be accepted. Otherwise, in all cases, the repo's default branch
+  # (usually master) will be used.
+  #github_branch:
+
+  #
+  # Provide a list of supported platforms, and for each platform a list of versions.
+  # If you don't wish to enumerate all versions for a particular platform, use 'all'.
+  # To view available platforms and versions (or releases), visit:
+  # https://galaxy.ansible.com/api/v1/platforms/
+  #
+  platforms:
+    - name: Fedora
+      versions:
+        - all
+  #   - 25
+  # - name: SomePlatform
+  #   versions:
+  #   - all
+  #   - 1.0
+  #   - 7
+  #   - 99.99
+    - name: EL
+      versions:
+        - all
+  galaxy_tags:
+    - sudoers
+    - sshd
+    - users
+    - ansible
+    # List tags for your role here, one per line. A tag is a keyword that describes
+    # and categorizes the role. Users find roles by searching for tags. Be sure to
+    # remove the '[]' above, if you add tags to this list.
+    #
+    # NOTE: A tag is limited to a single word comprised of alphanumeric characters.
+    #       Maximum 20 tags per role.
+
+dependencies: []
+  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
+  # if you add dependencies to this list.
+----
+
+. Modify the *README.md* file to contain the correct items and README information for your role.
++
+.*README.md* File
+[source,bash]
+----
+Ansiblize Systems
+=========
+
+This role is meant to setup and create an Ansible user with a username, password, SSH key, and to add the user to the SUDOERS file with password-less sudo access.
+
+Requirements
+------------
+
+This role assumes that you are operating on an EL-based Linux distribution utilizing SystemD.
+
+Role Variables
+--------------
+
+**pkg_name** - This variable is the name of the package or a list of package names that can be installed on the system. This is the "ONLY" required variable to be supplied.
+
+**pkg_state** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+
+Dependencies
+------------
+
+There are no dependencies for this playbook, but there is another related role published to work with Linux services.
+
+Example Playbook
+----------------
+
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+
+
+
+    ---
+    - name: Install Software Packages
+      hosts: serverc
+      vars:
+        pkg_name:
+          - vim
+          - tree
+          - httpd
+      roles:
+        - tmichett.deploy_packages
+
+
+
+License
+-------
+
+BSD
+
+Author Information
+------------------
+
+Travis Michette
+tmichett@redhat.com
+----
+
 === Publishing Ansible Roles to Ansible Galaxy
