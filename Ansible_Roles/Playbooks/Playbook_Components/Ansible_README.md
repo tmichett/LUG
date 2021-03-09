@@ -20,9 +20,9 @@ Role Variables
 
 **ssh_key_answer** - This variable is used when you want to copy the SSH public key of the current user. It leverages a **lookup** to grab the public SSH key of the current user and copy it to the managed host's authorized keys. It is IMPORTANT to note that if the **ssh_key_file_data** SSH key value is provided and defined for that variable, a **yes** for this variable will still ignore the task.
 
-**ssh_root_allowed** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+**ssh_root_allowed** - This is one of two 
 
-**ssh_passwords_allowed** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+**ssh_passwords_allowed** -
 
 
 Dependencies
