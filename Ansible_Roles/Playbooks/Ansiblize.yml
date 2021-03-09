@@ -103,8 +103,7 @@
     - name: Test SSHD Config File Debug Output
       debug:
         msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stderr_lines }}
-      when:
-        - sshd_results.failed
+      when: FAILED in sshd_results
 
 
 
