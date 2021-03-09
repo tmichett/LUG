@@ -366,3 +366,115 @@ tmichett@redhat.com
 ----
 
 === Publishing Ansible Roles to Ansible Galaxy
+
+One the role has been created and tested thoroughly, it can be shared through Ansible Galaxy. Again, this assumes that you've already setup an account with Github and linked that account to your Ansible Galaxy account.
+
+. Login to Ansible Galaxy
++
+image::Ansible-f2143.png[title="Ansible Galaxy Home", align="center"]
+
+. Select your *My Content* (*Namespaces*) selection from the side navigation menu and click "*Add Content*"
++
+image::Ansible-5c183.png[title="Ansible Galaxy Content", align="center"]
+
+. Click *Import Role from Github*
++
+image::Ansible-6edd9.png[title="Ansible Galaxy Content Import", align="center"]
+
+. Locate and select the Github repository containing the role you wish to import. _(Make use of the filter to assist in locating the correct repository)_. Once you've located the correct repository, place a *checkmark* in the box and then click "*OK*".
++
+image::Ansible-ad465.png[title="Ansible Galaxy Import Role from Github", align="center"]
+
+. The role import process will begin and Ansible Galaxy will automatically perform validation and linting on the imported role and components. You can click the *>* beside your Ansible Galaxy ID or the Ansible Galaxy Team ID (_depending on where you imported the roles_) to expand the list of roles.
++
+image::Ansible-48713.png[title="Ansible Galaxy Content Listing", align="center"]
++
+.Ansible Galaxy Content Provider Namespaces
+[TIP]
+====
+In this demo, I have two (2) *Ansible Galaxy Content Provider Namespaces*. One of these is my personal namespace *tmichett* and the other is where I'm a member of Red Hat Consulting. Most likely you will have a single Namespace.
+====
++
+.Warning Header
+[WARNING]
+====
+You will want to check the status of your imported Role and see what type of score it received. Ideally, you should be receiving a score of 5/5 meaning that at least all role components were imported successfully and passed the *linting* process and there were no errors that could be picked up from an automated scan process.
+====
+
+. After importing the role, check the *score* and look for anything that can be fixed easily and re-published/re-processed to Ansible Galaxy. Select the role to receive more information. Click the *Show Details* for the *Quality Score* to get a breakdown of what may need to be fixed.
++
+image::Ansible-5276d.png[title="Ansible Galaxy - Role Details", align="center"]
+image::Ansible-d14d5.png[title="Ansible Galaxy - Role Details (Quality Score Details - Shown)", align="center"]
+
+. Resolve issues with role and commit changes to Github. Then return to Ansible Galaxy and re-process the role.
++
+.Performing *git* Checks
+[source,bash]
+----
+[student@workstation Demo_Role]$ git status <1>
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+	modified:   defaults/main.yml
+	modified:   handlers/main.yml
+	modified:   meta/main.yml
+	modified:   tasks/main.yml
+	deleted:    vars/main.yml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+[student@workstation Demo_Role]$ git add . <2>
+
+
+[student@workstation Demo_Role]$ git commit -m "Updated Git for the role contents" <3>
+[master 9406a9c] Updated Git for the role contents
+ 6 files changed, 162 insertions(+), 63 deletions(-)
+ rewrite README.md (74%)
+ rewrite tasks/main.yml (86%)
+ delete mode 100644 vars/main.yml
+
+
+[student@workstation Demo_Role]$ git push <4>
+Enumerating objects: 21, done.
+Counting objects: 100% (21/21), done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (11/11), 2.80 KiB | 718.00 KiB/s, done.
+Total 11 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:tmichett/Demo_Role.git
+   5c12d1a..9406a9c  master -> master
+----
+<1> Checking local repository status
+<2> Adding changed content to local git repository
+<3> Committing content to local git repository
+<4> Pushing content to Github Repository
++
+.DEMO Role Note
+[NOTE]
+====
+In this example, I created the initial Ansible Role and pushed to Github, but I neglected to commit and push any of the changes and the actual role into the Github repository. The import into *Ansible Galaxy* imported just the role skeleton which was created using the *ansible-galaxy init* command.
+====
++
+image::Ansible-a6e3a.png[title="Github Repository Verification", align="center"]
+
+. Import/Replace the role in Ansible Galaxy using the *Import* button listed by the role.
++
+image::Ansible-47a84.png[title="Refreshing Role from Github Repository", align="center"]
++
+.Refreshing the Role
+[NOTE]
+====
+The refresh process will perform the linting and verification process again as the role is imported/updated in Ansible Galaxy. This will create a new score which will hopefully achieve the 5/5 score on quality. Keep in mind, this score doesn't track how good/useful the role is, but more that it conforms to 100% Ansible Galaxy standards and that no required options are missing.
+
+image::Ansible-11ac9.png[title="Ansible Galaxy - Quality Score Updated", align="center"]
+image::Ansible-7dd11.png[title="Ansible Galaxy - Quality Score Updated (Details)", align="center"]
+
+In this instance, some of the items found are around choices for implementation of tasks using modules such as *shell* and *command* that are not idempotent. The modules were used to achieve specific functions and are considered fine for the implementation of this role. There are other modules that could be used for the password functionality, but this method is the simplest illustration of Ansible and how to create roles.
+====
