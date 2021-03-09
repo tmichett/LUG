@@ -99,7 +99,9 @@
     - name: Test SSHD Config File Debug Output
       debug:
         msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stderr_lines }}
-      when: sshd_results.rc != 0 or sshd_results.changed
+      when:
+        - sshd_results.rc != 0
+        - sshd_results.changed
 
     ### Test the SSHD Config File
 ##    - name: Test SSHD Config File Debug Output
