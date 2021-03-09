@@ -6,14 +6,24 @@ This role is meant to setup and create an Ansible user with a username, password
 Requirements
 ------------
 
-This role assumes that you are operating on an EL-based Linux distribution utilizing SystemD.
+This role assumes that you are operating on an EL-based (RPM based) Linux distribution utilizing SystemD.
 
 Role Variables
 --------------
 
-**pkg_name** - This variable is the name of the package or a list of package names that can be installed on the system. This is the "ONLY" required variable to be supplied.
+**ansible_user_name** - This variable is defined by default in the **defaults/main.yml** and is a required variable for the playbook. It is suggested to use this variable in the playbook designed to use the role. This variable defines the **username** to be created on the system and added to the **SUDOERS** file for password-less sudo capability.
 
-**pkg_state** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+**ansible_user_password** - This variable is defined by default in the **defaults/main.yml** and is an optional variable for the playbook. It is suggested to use this variable in the playbook designed to use the role. This variable defines the **password** to be created on the system for the given  **username**.
+
+
+**ssh_key_file_data** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+
+**ssh_key_answer** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+
+**ssh_root_allowed** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+
+**ssh_passwords_allowed** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+
 
 Dependencies
 ------------
@@ -28,15 +38,15 @@ Including an example of how to use your role (for instance, with variables passe
 
 
     ---
-    - name: Install Software Packages
-      hosts: serverc
+    - name: Ansiblize my Systems
+      hosts: servera
       vars:
         pkg_name:
           - vim
           - tree
           - httpd
       roles:
-        - tmichett.deploy_packages
+        - tmichett.ansiblize
 
 
 
