@@ -90,8 +90,9 @@
     ### Technically this will exit out and break the Ansible playbook if it fails
     - name: Test SSHD Config File
       shell: sshd -t
-      register: sshd_results
       when: ssh_root_login.changed or ssh_password_login.changed
+      register: sshd_results
+
 
     ### Test the SSHD Config File
     - name: Test SSHD Config File Debug Output
