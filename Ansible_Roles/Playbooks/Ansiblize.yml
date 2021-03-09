@@ -104,8 +104,7 @@
       debug:
         msg: The SSHD_CONFIG file is broken. Please fix the file as there is an issue with either the line with "PermitRootLogin" or the line with "PasswordAuthentication". The specific issue is {{ sshd_results.stderr_lines }}
       when:
-        - sshd_results.rc != 0 or sshd_results.rc is not defined
-        - sshd_results.changed
+        - sshd_results.failed
 
 
 
