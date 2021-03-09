@@ -61,18 +61,20 @@
         content: "{{ ansible_user_name }} ALL=(ALL) NOPASSWD:ALL\n"
         dest: /etc/sudoers.d/{{ ansible_user_name }}
 
-    ### Modify SSH_CONFIG to prevent Root Login
-    - name: Prevent Root Login via SSH (if required)
+
+    ### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
+    - name: Prevent Password Login via SSH (if required)
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^PasswordAuthentication'
         line: PasswordAuthentication {{ ssh_passwords_allowed }}
         backup: yes
       when:  ssh_passwords_allowed is defined
+      register: ssh_password_login
       notify:
         - Restart SSHD Test
 
-    ### Modify SSH_CONFIG to permit SSH Key ONLY Access (no passwords)
+    ### Modify SSH_CONFIG to prevent Root Login
     - name: Prevent Root Login via SSH (if required)
       lineinfile:
         path: /etc/ssh/sshd_config
@@ -80,6 +82,7 @@
         line: PermitRootLogin {{ ssh_root_allowed }}
         backup: yes
       when: ssh_root_allowed is defined
+      register: ssh_root_login
       notify:
         - Restart SSHD
 
@@ -88,6 +91,7 @@
     - name: Test SSHD Config File
       shell: sshd -t
       register: sshd_results
+      when: ssh_root_login.changed or ssh_password_login.changed
 
     ### Test the SSHD Config File
     - name: Test SSHD Config File Debug Output
