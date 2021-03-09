@@ -68,6 +68,7 @@
         regexp: '^PasswordAuthentication'
         line: PasswordAuthentication {{ ssh_passwords_allowed }}
         backup: yes
+      when:  ssh_passwords_allowed is defined
       notify:
         - Restart SSHD Test
 
@@ -78,6 +79,7 @@
         regexp: '^PermitRootLogin'
         line: PermitRootLogin {{ ssh_root_allowed }}
         backup: yes
+      when: ssh_root_allowed is defined
       notify:
         - Restart SSHD
 

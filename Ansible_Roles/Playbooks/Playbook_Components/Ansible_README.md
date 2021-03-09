@@ -16,9 +16,9 @@ Role Variables
 **ansible_user_password** - This variable is defined by default in the **defaults/main.yml** and is an optional variable for the playbook. It is suggested to use this variable in the playbook designed to use the role. This variable defines the **password** to be created on the system for the given  **username**.
 
 
-**ssh_key_file_data** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+**ssh_key_file_data** - This variable contains the value of the SSH public key of the specified user. This will be used to populate the authorized keys on the remote managed nodes for the user specified with the **ansible_user_name** variable. When provided, this will create the authorized key for the given user and ignore the task which will copy the current (local) user's SSH public key to the managed host.
 
-**ssh_key_answer** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
+**ssh_key_answer** - This variable is used when you want to copy the SSH public key of the current user. It leverages a **lookup** to grab the public SSH key of the current user and copy it to the managed host's authorized keys. It is IMPORTANT to note that if the **ssh_key_file_data** SSH key value is provided and defined for that variable, a **yes** for this variable will still ignore the task.
 
 **ssh_root_allowed** - This variable is a default variable and set to "latest". The allowed values for this variable are "latest" and "present" to install the package(s) or "absent" to ensure that the package has been removed.
 
