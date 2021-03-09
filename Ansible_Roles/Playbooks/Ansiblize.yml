@@ -34,7 +34,7 @@
     ### Create the Ansible User
     - name: Create Ansible User Password (if required)
       shell: echo {{ ansible_user_password }} | passwd {{ ansible_user_name }} --stdin
-      when: "{{ ansible_user_password }}" is defined
+      when: ansible_user_password is defined
 
     ### Copy Ansible User Public SSH Keys (if defined)
     ### This will take the public key and set as the authorized_key from the current user
