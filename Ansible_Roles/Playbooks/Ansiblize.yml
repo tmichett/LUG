@@ -94,6 +94,10 @@
       register: sshd_results
       ignore_errors: yes
 
+    ### Test the SSHD Config File
+    - name: Test SSHD Config File Debug Output
+      debug:
+        var: sshd_results
 
     ### Test the SSHD Config File
     - name: Test SSHD Config File Debug Output
@@ -103,10 +107,6 @@
         - sshd_results.rc != 0
         - sshd_results.changed
 
-    ### Test the SSHD Config File
-##    - name: Test SSHD Config File Debug Output
-##      debug:
-##        var: sshd_results
 
 
   handlers:
