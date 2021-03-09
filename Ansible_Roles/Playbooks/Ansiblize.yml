@@ -72,7 +72,7 @@
       when:  ssh_passwords_allowed is defined
       register: ssh_password_login
       notify:
-        - Restart SSHD Test
+        - Restart SSHD
 
     ### Modify SSH_CONFIG to prevent Root Login
     - name: Prevent Root Login via SSH (if required)
