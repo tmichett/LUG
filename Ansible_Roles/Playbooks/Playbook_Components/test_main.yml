@@ -1,0 +1,8 @@
+---
+- name: Ansiblize Managed Hosts - Demo Test
+  hosts: all
+  vars:
+    ansible_user_name: travis
+    ansible_user_password: redhat
+  roles:
+    - tmichett.demo_role

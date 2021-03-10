@@ -478,3 +478,115 @@ image::Ansible-7dd11.png[title="Ansible Galaxy - Quality Score Updated (Details)
 
 In this instance, some of the items found are around choices for implementation of tasks using modules such as *shell* and *command* that are not idempotent. The modules were used to achieve specific functions and are considered fine for the implementation of this role. There are other modules that could be used for the password functionality, but this method is the simplest illustration of Ansible and how to create roles.
 ====
+
+=== Using Ansible Galaxy Roles in a Playbook
+
+There are multiple ways to use a role from Ansible Galaxy in a playbook. One of the simplest methods is to download the role as Ansible Galaxy states but use the *-p roles* option to download and create the role in your current working directory. If you are doing Ansible playbook development locally on an Ansible control node, it is assumed you are developing playbooks in individual directories with their own *inventory* files as well as an *ansible.cfg* file. If you are leveraging *git* or some other version control system, implementing playbooks and roles this way will make things easier as you have all the code of the tested role at the time your playbook was created and it will be part of the version control system along with your created Ansible playbooks and any other assets that are part of your repository.
+
+. Download and install the role from Ansible Galaxy but remember to specify a *-p roles* to install the role in the current working directory.
++
+image::Ansible-637dc.png[]
++
+.Role installation with the *-p roles*
+[source,bash]
+----
+[student@workstation LUG]$ ansible-galaxy install tmichett.demo_role -p roles
+- downloading role 'demo_role', owned by tmichett
+- downloading role from https://github.com/tmichett/Demo_Role/archive/master.tar.gz
+- extracting tmichett.demo_role to /home/student/LUG/roles/tmichett.demo_role
+- tmichett.demo_role (master) was installed successfully
+----
+
+. Verify the role has been installed correctly
++
+.Verification of Role Installation with *tree*
+[source,bash]
+----
+[student@workstation LUG]$ tree
+.
+└── roles
+    └── tmichett.demo_role
+        ├── defaults
+        │   └── main.yml
+        ├── handlers
+        │   └── main.yml
+        ├── meta
+        │   └── main.yml
+        ├── README.md
+        ├── tasks
+        │   └── main.yml
+        └── tests
+            ├── inventory
+            └── test.yml
+
+7 directories, 7 files
+----
+
+. Create a simple playbook to use the role and ensure you have a working *ansible.cfg* and *inventory* file. _It is possible that the role creator provided a demo playbook as part of the role README or possibly provided a demo/test playbook in the *tests* section of the role (if it exists)._
++
+.Demo_Playbook.yml
+[source,bash]
+----
+---
+- name: Ansiblize Managed Hosts - Demo Test
+  hosts: all
+  vars:
+    ansible_user_name: travis
+    ansible_user_password: redhat
+  roles:
+    - tmichett.demo_role
+----
+
+. Test the role by running the playbook
++
+.Testing of the Role
+[source,bash]
+----
+[student@workstation LUG]$ ansible-playbook Demo_Playbook.yml -b
+
+PLAY [Ansiblize Managed Hosts - Demo Test] *******************************************
+
+TASK [Gathering Facts] ***************************************************************
+ok: [servera]
+ok: [serverb]
+
+TASK [tmichett.demo_role : Create Ansible User] **************************************
+ok: [serverb]
+ok: [servera]
+
+TASK [tmichett.demo_role : Create Ansible User Password (if required)] ***************
+changed: [serverb]
+changed: [servera]
+
+TASK [tmichett.demo_role : Copy Ansible User SSH Keys] *******************************
+skipping: [servera]
+skipping: [serverb]
+
+TASK [tmichett.demo_role : Copy Ansible User SSH Keys] *******************************
+skipping: [servera]
+skipping: [serverb]
+
+TASK [tmichett.demo_role : Create Ansible User SUDOERS Entry] ************************
+ok: [serverb]
+ok: [servera]
+
+TASK [tmichett.demo_role : Prevent Password Login via SSH (if required)] *************
+skipping: [servera]
+skipping: [serverb]
+
+TASK [tmichett.demo_role : Prevent Root Login via SSH (if required)] *****************
+skipping: [servera]
+skipping: [serverb]
+
+TASK [tmichett.demo_role : Test SSHD Config File] ************************************
+skipping: [servera]
+skipping: [serverb]
+
+TASK [tmichett.demo_role : Test SSHD Config File Debug Output] ***********************
+skipping: [servera]
+skipping: [serverb]
+
+PLAY RECAP ***************************************************************************
+servera                    : ok=4    changed=1    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
+serverb                    : ok=4    changed=1    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
+----

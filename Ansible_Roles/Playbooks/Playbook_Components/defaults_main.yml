@@ -1,2 +1,3 @@
 ---
 ansible_user_name: ansible-user
+ssh_key_answer: no

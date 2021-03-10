@@ -63,7 +63,7 @@
     - Restart SSHD
 
 ### Test the SSHD Config File
-### Technically this will exit out and break the Ansible playbook if it fails
+### Technically this will exit out and break the Ansible playbook if it fails if error wasn't there
 - name: Test SSHD Config File
   shell: sshd -t
   when: ssh_root_login.changed or ssh_password_login.changed

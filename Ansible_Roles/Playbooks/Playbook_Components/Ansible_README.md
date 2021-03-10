@@ -13,7 +13,7 @@ Role Variables
 
 **ansible_user_name** - This variable is defined by default in the **defaults/main.yml** and is a required variable for the playbook. It is suggested to use this variable in the playbook designed to use the role. This variable defines the **username** to be created on the system and added to the **SUDOERS** file for password-less sudo capability.
 
-**ansible_user_password** - This variable is defined by default in the **defaults/main.yml** and is an optional variable for the playbook. It is suggested to use this variable in the playbook designed to use the role. This variable defines the **password** to be created on the system for the given  **username**. If this variable is not defined a password will not be created for the user account.
+**ansible_user_password** - This is an optional variable for the playbook. It is suggested to use this variable in the playbook designed to use the role. This variable defines the **password** to be created on the system for the given  **username**. If this variable is not defined a password will not be created for the user account.
 
 
 **ssh_key_file_data** - This variable contains the value of the SSH public key of the specified user. This will be used to populate the authorized keys on the remote managed nodes for the user specified with the **ansible_user_name** variable. When provided, this will create the authorized key for the given user and ignore the task which will copy the current (local) user's SSH public key to the managed host.
