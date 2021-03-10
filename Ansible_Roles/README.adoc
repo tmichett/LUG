@@ -17,6 +17,14 @@ endif::[]
 
 The items within this directory and its sub-directories related to the presentation on Ansible Roles and publishing Ansible Roles to Ansible Galaxy. The playbooks and contents within this presentation are for demonstration and meant to provide an easy understanding for how to create and publish an Ansible Role. Additional Ansible Role examples are available from other Github repositories and Ansible Galaxy roles.
 
+There have been several things that will be seen in the workbook and the *Playbook* components section that are done for illustration purposes and to showcase some of the features that leveraging Ansible playbooks and Ansible roles provide.
+
+link:https://github.com/tmichett/LUG/blob/main/Ansible_Roles/Presentation/CKB-LUG-Ansible.pdf[Ansible Roles Presentation - PDF]
+
+link:https://github.com/tmichett/LUG/blob/main/Ansible_Roles/Workbook/PDF/Ansible_Workshop_Guide.pdf[Ansible Roles Workshop Guide - PDF]
+
+The *Playbooks* directory contains the *Playbook_Components* sub-directory. The files in this directory have been broken down from the *Ansiblize.yml* playbook and have been made to be easily copied into an Ansible role structure. For example, the *tasks_main.yml* would go into the *tasks/main.yml* in the role's *tasks* directory for the structure created by the *ansible-galaxy init* command.
+
 .*Ansible Galaxy Roles*
 [TIP]
 ====
