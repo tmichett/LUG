@@ -21,7 +21,75 @@ endif::[]
 
 == Ansible Roles
 
-Ansible roles ... blah blah blah
+Ansible roles are resusable Ansible components that allow common tasks to be repeated/repurposed without needing to re-write or create custom playbooks. Ansible roles work the same way as Ansible tasks, variables, handlers, except that roles are generally published and shared to be used to perform a task or set of tasks in automation playbooks. In order to understand and use Ansible Roles, you must fist understand how to setup and configure Ansible as well as how an Ansible playbook is created and run. Ansible basics are outside the scope of this workshop, but the presentation covers the most important components for successfully creating and running Ansible playbooks utilizing an Ansible role.
+
+.*Terminology*
+
+* *Ansible* - An automation language leveraging modules to be used in one or more tasks on managed systems. Most Ansible automation leverages and Ansible playbook which is a YAML formatted file containing Ansible directives.
+
+* *Ansible Modules* - Components used by Ansible tasks and playbooks which are generally implemented and developed in Python. Ansible modules work with certain system utilities and are optimized to be leveraged as a declarative automation language and provide idempotency.
+
+* *Ansible ad-hoc commands* – A way of executing a single Ansible task quickly that relies on a single Ansible module to perform the tests/changes of the task.
+
+.*Ansible Components and Commands*
+
+* *ansible.cfg* – Configuration file for running the ansible and ansible-playbook commands.
+* *Inventory* – Inventory file used by the ansible and ansible-playbook commands identifying managed hosts/nodes.
+* *ansible* – Command used to perform/execute Ansible ad-hoc commands against a managed node.
+* *ansible-playbook* – Command used to execute and run Ansible playbooks
+* *ansible-galaxy* – Command to create or utilize Ansible roles. Many of these roles are published on http://galaxy.ansible.com
+* *Playbook* – Collection of Ansible tasks organized into one or more Ansible plays.
+* *Task* – Collection/list of Ansible modules arranged into instructions. Each task utilizes an Ansible module to perform a given action.
+* *Ansible Module* – Specific module (small program generally implemented in Python) which perform the commands and executes the program to get the desired state of a given task.
+
+
+.*ansible.cfg* File
+
+This file defines the configuration directives which apply directly to how the ansible and ansible-playbook command interact with the Ansible application and which configuration items are applied to a given Ansible session.
+
+* *./ansible.cfg* – When located in the current working directory (CWD) this file is the highest precedence.
+* *~/.ansible.cfg* – When located in the user’s home directory, this file will have precedence if an ansible.cfg doesn’t exist in the CWD.
+* */etc/ansible/ansible.cfg* – This is the default configuration file and has the lowest precedence. This file is used when no other ansible.cfg file exists.
+
+.*ansible.cfg* as an Environment Variable
+[IMPORTANT]
+====
+It is also possible to define the *ansible.cfg* file with the environment variable *ANSIBLE_CONFIG*. If this variable is used, it will override all other configuration files.
+====
+
+.*inventory* File
+
+The inventory file can contain both Ansible managed hosts/nodes as well as inventory variables to be used for the managed nodes.
+Inventory location is generally specified by the ansible.cfg file
+
+* *./inventory* – Common practice to leverage inventory files with playbooks and the ansible.cfg file in the current working directory
+* */etc/ansible/hosts* – Default inventory file deployed with the Ansible package
+
+.*Ansible Playbook Structure*
+
+Most playbooks will have a playbook name, a hosts section, and a tasks section. There are many other playbook sections and in some instances, playbooks leveraging roles may not even have a tasks section.
+
+.Typical Playbook Structure
+[source,yaml]
+----
+---
+- name: Ansiblize Managed Hosts
+  hosts: localhost
+  vars_files:
+    - variables.yml
+
+  tasks:
+    - name: Create Ansible User
+      debug:
+          msg: This will use the USER  module
+
+  handlers:
+    - name: Restart SSHD
+      debug:
+          msg: This sill use the SERVICE or SYSTEMD
+
+----
+
 
 === Creating a Github repository for an Ansible Role
 
