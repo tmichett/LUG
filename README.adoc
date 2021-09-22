@@ -18,3 +18,7 @@ endif::[]
 == Bridgeport/Clarksburg LUG and Meetup
 
 This repository was created to house resources for the Bridgeport/Clarksburg LUG and Meetup group.
+
+LUG Website: https://sites.google.com/view/wvlug/home
+
+YouTube Channel: https://www.youtube.com/channel/UCIPDbdykYAeKEejYAhCRPWg
