@@ -19,7 +19,7 @@ endif::[]
 
 Shorter presentation which covers the "Future" portions of Ansible. The presentation explores Ansible Execution Environments, Ansible Content Navigator, Ansible Private Automation Hub, and Ansible Controller (replacement for Ansible Tower).
 
-* *Slides as Presented*: 
+* *Slides as Presented*: https://github.com/tmichett/LUG/blob/main/AAP2x/AAP2x-Presentation.pdf
 
 == Larger Webinar for Ansible Past/Present/Future
 
