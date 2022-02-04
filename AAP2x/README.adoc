@@ -1,0 +1,29 @@
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:pygments-style: tango
+:source-highlighter: pygments
+:imagesdir: images/
+
+
+= AAP2.x
+
+== Contains an Overview of What's New in AAP 2.x
+
+Shorter presentation which covers the "Future" portions of Ansible. The presentation explores Ansible Execution Environments, Ansible Content Navigator, Ansible Private Automation Hub, and Ansible Controller (replacement for Ansible Tower).
+
+* *Slides as Presented*: 
+
+== Larger Webinar for Ansible Past/Present/Future
+
+* Github (https://github.com/tmichett/AAP_Webinar)
+* Slides (https://github.com/tmichett/AAP_Webinar/blob/main/Presentation/Slides/Ansible%20Automation%20Workshop%20(Past%2C%20Present%2C%20and%20Future)%20-%20Red%20Hat%20Training%20and%20Certification%20-%20Handouts%20with%20Notes.pdf)
+* Workbook (https://github.com/tmichett/AAP_Webinar/blob/main/Workshop_Guide/AAP_Workshop_Guide.pdf)
+* Presentation Recording: https://vimeo.com/671198584/b34755e411
